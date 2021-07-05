@@ -226,7 +226,7 @@ FrameCols::for_each(combined, output,
 output(error, "error");
 ```
 
-A example of higher-ordered dataframes:
+An example of higher-ordered dataframes:
 
 ```cpp
 template <typename ... KEY>
