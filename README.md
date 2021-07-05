@@ -12,14 +12,14 @@ This is a header-only library with no external dependencies.
 
 ### Datatypes 
 
-```
+```cpp
 template <typename T>
 using Column = ...;
 ```
 
 This is a column of values of one type; currently just an alias for `std::vector`.
 
-```
+```cpp
 struct null_symbol {};
 
 template <typename TAG, typename Int = std::uint16_t>
@@ -44,12 +44,14 @@ struct Symbol {
 
 This type maps strings to interned symbol identifiers. Support for 'null value symbols' is provided. 
 `null()` and `ok()` both check for null.
+
 Symbols map to 16-bit integers by default.
+
 Besides strings, any type that supports a `get<std::string>()` method can be converted to a Symbol.
 
 ### Grouping and summarizing
 
-```
+```cpp
 template <typename Int = std::uint32_t>
 struct Index {
   
@@ -79,7 +81,7 @@ Note! The index never stores whatever is returned from `func()`; only a vector o
 
 The given range supports these operations:
 
-```
+```cpp
 struct range_t {
    Int group_head;
    void for_each(auto);
@@ -88,12 +90,14 @@ struct range_t {
 ```
 
 `for_each(auto func)` -- for each element in the range, call `func(Int i)` with the element.
+
 `size()` -- returns the length of the range.
+
 `group_head` -- is the first element in the range.
 
 ### Column-wise operations
 
-```
+```cpp
 template <auto ... MEMS>
 struct Columns {
   static void apply(auto&& frame, auto func);
@@ -114,7 +118,7 @@ The following operations are supported:
 
 `combine(auto&& frame1, auto&& frame2, auto func)` -- combines `frame1` and `frame2` by calling `func(frame1.*MEMS, frame2.*MEMS)` for each pointer-to-member `MEMS`. 
 
-```
+```cpp
 namespace tuple {
   void apply(auto&& tuple, auto func);
   void for_each(auto&& tuple, auto ... func);
@@ -148,7 +152,7 @@ Makes a copy of `t` but leave only those whose index is found in `ix`.
 
 A non-functional but complete example:
 
-```
+```cpp
 using namespace nanoframe;
 
 namespace tags {
@@ -224,7 +228,7 @@ output(error, "error");
 
 A example of higher-ordered dataframes:
 
-```
+```cpp
 template <typename ... KEY>
 struct FrameGroup {
   using key_t = std::tuple<Column<TA>, KEY...>;
