@@ -59,7 +59,7 @@ struct Index {
   
   Index(size_t, auto);
   
-  Index<Int> merge(auto);
+  Index<Int>& merge(auto);
   
   Column<Int> indexes() const;
 };
@@ -224,6 +224,42 @@ FrameCols::for_each(combined, output,
                     std::tuple{"tvr"});
                     
 output(error, "error");
+```
+
+Filtering dataframes:
+
+```cpp
+Frame new_combined;
+
+Index(N,
+      [&combined](auto i) {
+          return /* grouping condition goes here */;
+      }).merge([&combined, &new_combined](auto range) {
+          range.for_each([&](size_t ix) {
+
+              if (/* filter condition goes here */) {
+                  FrameCols::combine(new_combined, combined,
+                                     [&](auto& to_col, const auto& from_col) {
+                                         to_col.push_back(from_col[ix]);
+                                     });
+              }
+          });
+      });
+```
+
+Or, if you don't need grouping:
+
+```cpp
+Frame new_combined;
+
+for (size_t ix = 0; ix < N; ++ix) {
+    if (/* filter condition goes here */) {
+        FrameCols::combine(new_combined, combined,
+                           [&](auto& to_col, const auto& from_col) {
+                               to_col.push_back(from_col[ix]);
+                           });
+    }
+}
 ```
 
 An example of higher-ordered dataframes:

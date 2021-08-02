@@ -94,8 +94,7 @@ struct Index {
         Column<Int>::const_iterator b;
         Column<Int>::const_iterator e;
 
-        template <typename FUNC>
-        void for_each(FUNC f) const {
+        void for_each(auto f) const {
 
             for (auto i = b; i != e; ++i) {
                 f(*i);
@@ -107,8 +106,7 @@ struct Index {
         }
     };
 
-    template <typename FUNC>
-    Index(size_t n, FUNC vals) : ix(n), group_start(n) {
+    Index(size_t n, auto vals) : ix(n), group_start(n) {
         for (Int i = 0; i < ix.size(); ++i) {
             ix[i] = i;
         }
@@ -133,8 +131,7 @@ struct Index {
         }        
     }
 
-    template <typename FUNC>
-    Index<Int> merge(FUNC f) {
+    Index<Int>& merge(auto f) {
         size_t prev_i = 0;
         for (size_t i = 0; i < ix.size(); ++i) {
 
